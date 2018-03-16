@@ -93,8 +93,8 @@ $(function () {
             });
         });
         it('should actually change the content when loadFeed is loaded', function (done) {
-               expect(feed1).not.toBe(feed2);
-               done();
+            expect(feed1).not.toBe(feed2);
+            done();
         });
     });
 }());
