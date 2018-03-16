@@ -29,7 +29,7 @@ $(function () {
 		 */
         it('has url defined and it\'s not empty', function () {
             allFeeds.forEach(feed => {
-                expect(feed.url).toBeDefined();
+                expect(feed.url).toBeTruthy();
                 expect(feed.url).not.toBe('');
             });
         });
@@ -39,7 +39,7 @@ $(function () {
 		 */
         it('has name defined and it\'s not empty', function () {
             allFeeds.forEach(feed => {
-                expect(feed.name).toBeDefined();
+                expect(feed.name).toBeTruthy();
                 expect(feed.name).not.toBe('');
             });
         });
@@ -47,14 +47,14 @@ $(function () {
     describe('The menu', function () {
         var body = null;
         beforeEach(function () {
-            body = document.querySelector('body');
+            body = $('body');
         });
 		/**
 		 * It tests to make sure the menu element is
 		 * hidden by default.
 		 */
         it('has element hidden by default', function () {
-            expect(body.getAttribute('class')).toBe('menu-hidden');
+            expect(body.hasClass('menu-hidden')).toBe(true);
         });
 		/* 
 		 * It tests to make sure that the mnenu changes
@@ -63,9 +63,9 @@ $(function () {
         it('changes visibility when the menu icon is clicked', function () {
             let menuIcon = document.querySelector('.menu-icon-link');
             menuIcon.click();
-            expect(body.getAttribute('class')).toBe('');
+            expect(body.hasClass('menu-hidden')).toBe(false);
             menuIcon.click();
-            expect(body.getAttribute('class')).toBe('menu-hidden');
+            expect(body.hasClass('menu-hidden')).toBe(true);
         });
     });
     describe('Initial Entries', function () {
@@ -75,23 +75,26 @@ $(function () {
             });
         });
         it('should have at least a single .entry element within the .feed continer', function (done) {
-            let container = document.querySelector('.feed');
-            expect(container.children.length).toBeGreaterThan(0);
+            let entries = $('.feed .entry');
+            expect(entries.size()).toBeGreaterThan(0);
             done();
         });
     });
     describe('New Feed Selection', function () {
+        var feed1, feed2;
         beforeEach(function (done) {
             loadFeed(0, function () {
+                feed1 = document.querySelector('.feed').innerHTML;
+                done();
+            });
+            loadFeed(1, function () {
+                feed2 = document.querySelector('.feed').innerHTML;
                 done();
             });
         });
         it('should actually change the content when loadFeed is loaded', function (done) {
-            let initEntryTitlesCount = document.querySelectorAll('.feed h2');
-            initEntryTitlesCount.forEach(entryTitle => {
-                expect(entryTitle.innerText).not.toBe('');
-            });
-            done();
+               expect(feed1).not.toBe(feed2);
+               done();
         });
     });
 }());
